@@ -1,75 +1,46 @@
 <?php
 /**
- * Date: 01/02/15
- * Time: 20:22
- * Author: HJW88,
- * ** Some ideas was found from Book PHP 5 E-commerce Development by Michael Peacock
+ * Date: 06/02/15
+ * Time: 19:51
+ * Author: HJW88
  */
+class db {
 
-namespace model;
+    /*** Declare instance ***/
+    private static $instance = NULL;
 
-/**
- * Class Model
- * Define the base beaver and communication with Database.
- * It's an abstract class, every extended class must implement it's own method
- *
- * @package model\Model
- */
-abstract class DBModel
-{
-
-
-    // the db connection
-    private $connection = null;
-    // store the last result
-    private $last;
+    /*** The last sql result ***/
+    public $last;
 
     /**
-     * __construct
+     * the constructor is set to private so
+     * so nobody can create a new instance using new
      */
-    public function __construct()
+    private function __construct()
     {
+        // do nothing
     }
 
     /**
-     * __deconstruct,
-     * automatic disconnect db
-     */
-    public function __deconstruct()
-    {
-        $this->connection->close();
-    }
-
-    /**
-     * Use the default credential to connect db
+     * make connection
      *
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param string $database
-     * @return bool
+     * @return mysqli|null
      */
-    final public function newConnection($host = 'localhost',
-                                        $user = 'm2059127',
-                                        $password = 'VuzCzHaZ',
-                                        $database = 'm2059127')
+    public static function getInstance()
     {
-        $this->connection = new mysqli($host, $user, $password, $database);
-        if (mysqli_connect_errno()) {
-            error_log("DB Connection Error: " . $this->connection->error);
-            return false;
-        } else {
-            return true;
+        if (!self::$instance) {
+            self::$instance = new mysqli(__DB_HOST, __DB_USER, __DB_PASS, __DB_DATABASE);
         }
-
+        return self::$instance;
     }
+
 
     /**
      * Execute the sql query and store result into $last
      *
      * @param $queryStr SQL statement
      */
-    final function executeQuery($queryStr)
+    final public function executeQuery($queryStr)
     {
         if (!$result = $this->connection->query($queryStr)) {
             error_log('Error executing query: ' . $this->connection->error);
@@ -113,7 +84,7 @@ abstract class DBModel
      * @param array data to insert field => value
      * @return bool
      */
-    final private function insertRecords($table, $data)
+    final protected function insertRecords($table, $data)
     {
         // setup some variables for fields and values
         $fields = "";
@@ -145,11 +116,11 @@ abstract class DBModel
      * @param int the number of rows to be removed
      * @return void
      */
-    final private function deleteRecords( $table, $condition, $limit )
+    final protected function deleteRecords($table, $condition, $limit)
     {
-        $limit = ( $limit == '' ) ? '' : ' LIMIT ' . $limit;
+        $limit = ($limit == '') ? '' : ' LIMIT ' . $limit;
         $delete = "DELETE FROM {$table} WHERE {$condition} {$limit}";
-        $this->executeQuery( $delete );
+        $this->executeQuery($delete);
     }
 
     /**
@@ -159,33 +130,51 @@ abstract class DBModel
      * @param String the condition
      * @return bool
      */
-    final private function updateRecords( $table, $changes, $condition )
+    final protected function updateRecords($table, $changes, $condition)
     {
         $update = "UPDATE " . $table . " SET ";
-        foreach( $changes as $field => $value )
-        {
+        foreach ($changes as $field => $value) {
             $update .= "`" . $field . "`='{$value}',";
         }
 
         // remove our trailing ,
         $update = substr($update, 0, -1);
-        if( $condition != '' )
-        {
+        if ($condition != '') {
             $update .= "WHERE " . $condition;
         }
 
-        $this->executeQuery( $update );
+        $this->executeQuery($update);
+
+        return true;
+    }
+
+    /**
+     * @param $table
+     * @param $condition
+     * @return bool
+     */
+    final protected function selectRecords($table, $condition){
+        $select = "SELECT * FROM " . $table ;
+        if ($condition != '') {
+            $select .= "WHERE " . $condition;
+        }
+
+        $this->executeQuery($select);
 
         return true;
 
     }
 
     /**
-     * Save model into db
-     *
-     * @return mixed
+     * @return string
      */
-    abstract public function save();
+    public function __toString(){
+        return 'Model: '. get_class($this) . json_encode($this);
+    }
 
 
 }
+
+
+
+
