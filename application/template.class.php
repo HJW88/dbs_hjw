@@ -26,12 +26,13 @@ Class Template
     private $vars = array();
 
     /**
+     * Template Object delegate the viewController
+     *
      * @param $registry
      */
     function __construct($registry)
     {
         $this->registry = $registry;
-
     }
 
 

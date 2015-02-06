@@ -1,28 +1,35 @@
 <?php
+/**
+ * Date: 06/02/15
+ * Time: 19:51
+ * Author: HJW88
+ */
 
 /**
- * MVC is a design pattern. A Design pattern is a code structure that allows for common coding frameworks to be replicated quickly. You might think of a design pattern as a skeleton or framework on which your application will be built.
  *
- *the index.html file is our single point of access. As such, it provides the ideal space for declaring variables and site wide configurations.
+ * The index.php file is the single point of access.
+ * As such, it provides the ideal space for declaring variables
+ * and site wide configurations.
+ *
  */
 
 /*** define the site path ***/
 $site_path = realpath(dirname(__FILE__));
 define ('__SITE_PATH', $site_path);
 
-/*** include the init.php file ***/
+/*** include the init.php file
+ * this init.php contains all credential to DB and some basic settings.
+ ***/
 include 'includes/init.php';
 
-/*** load the router ***/
+/*** load the router object to registry ***/
 $registry->router = new router($registry);
 
 /*** set the controller path ***/
 $registry->router->setPath(__SITE_PATH . '/controller');
 
-/*** load up the template ***/
+/*** load up the template object ***/
 $registry->template = new template($registry);
 
 /*** load the controller ***/
 $registry->router->loader();
-
-error_log("Hi");

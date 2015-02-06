@@ -4,6 +4,14 @@
  * Time: 19:51
  * Author: HJW88
  */
+
+/**
+ * Class baseController,
+ *
+ * All other controller must extended from this class,
+ * and implement the index() function.
+ *
+ */
 Abstract Class baseController
 {
 

@@ -6,6 +6,15 @@ URL
 http://dbcip.cs.uni-duesseldorf.de/~m2059127/dbs_hjw/
 
 
+Description
+------
+This project is the "Abschlussproject" for my DBS AP at the University Duesseldorf, Germany.
+
+I build this project in MVC pattern, some basic modules were learned from the following tutorials.
+
+I only use Foundation CSS to help me git rid of designing html layout.
+
+
 MVC
 ------
 MVC is a design pattern. A Design pattern is a code structure that allows for common coding frameworks to be replicated quickly. You might think of a design pattern as a skeleton or framework on which your application will be built.

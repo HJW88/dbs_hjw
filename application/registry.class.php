@@ -4,6 +4,13 @@
  * Time: 19:51
  * Author: HJW88
  */
+
+
+/**
+ * Class Registry
+ * The registry is an object
+ * where site wide variables can be stored without the use of globals.
+ */
 Class Registry
 {
 

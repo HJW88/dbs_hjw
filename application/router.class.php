@@ -4,6 +4,14 @@
  * Time: 19:51
  * Author: HJW88
  */
+
+
+/**
+ * Class router
+ * The router class is responsible for loading up the correct controller.
+ *
+ * The basic router rule: ?rt={controller}/action
+ */
 class router
 {
     /*
