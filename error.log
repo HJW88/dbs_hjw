@@ -5,3 +5,4 @@
 [06-Feb-2015 19:53:24 Europe/Berlin] Hi
 [06-Feb-2015 20:01:13 Europe/Berlin] Hi
 [06-Feb-2015 20:06:26 Europe/Berlin] Hi
+[06-Feb-2015 20:51:27 Europe/Berlin] PHP Parse error:  syntax error, unexpected 'user' (T_STRING), expecting ',' or ';' in /home/student/m2059127/public_html/dbs_hjw/views/header.html on line 20

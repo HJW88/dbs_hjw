@@ -37,6 +37,7 @@ Class Template
 
 
     /**
+     * Set template variables
      * @param $index
      * @param $value
      */
@@ -45,7 +46,13 @@ Class Template
         $this->vars[$index] = $value;
     }
 
-
+    /**
+     * Render view
+     *
+     * @param $name
+     * @return bool
+     * @throws Exception
+     */
     function show($name)
     {
         $path = __SITE_PATH . '/views' . '/' . $name . '.html';
@@ -59,7 +66,6 @@ Class Template
         foreach ($this->vars as $key => $value) {
             $$key = $value;
         }
-
         include($path);
     }
 

@@ -21,6 +21,10 @@ Class Registry
     private $vars = array();
 
 
+    public function __construct(){
+        session_start();
+    }
+
     /**
      * @param $index
      * @param $value
