@@ -19,19 +19,40 @@
             <?php if(isset($_SESSION['user'])){
                 echo '<li><a href="#">' . $_SESSION['user']['username'] .'\'s Account</a></li>';
                 echo '<li class="divider"></li>';
-                echo '<li><a href="#">Logout</a></li>';
+                echo '<li><a href="?rt=user/logout">Logout</a></li>';
                 echo '<li class="divider"></li>';
             } else {
-                echo '<li><a href="#">Login</a></li>';
+                echo '<li><a href="?rt=user/login">Login</a></li>';
                 echo '<li class="divider"></li>';
-                echo '<li><a href="#">Create Account</a></li>';
+                echo '<li><a href="?rt=user/signup">Signup</a></li>';
             }
             ?>
             <li class="divider"></li>
             <li><a href="#">Search</a></li>
         </ul>
     </section>
-
 </nav>
 
 <div class="row">
+
+
+<?php
+
+require_once('helper.php');
+
+$alert = <<<EOD
+<div data-alert class="alert-box {type} radius">
+    {msg}
+</div>
+EOD;
+
+
+if (isset($_SESSION['alert'])){
+
+    foreach($_SESSION['alert'] as $type=>$msg){
+        echo format($alert, array('type' => $type, 'msg' => $msg));
+    }
+
+}
+
+?>

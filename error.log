@@ -1,8 +1,7 @@
  
-[06-Feb-2015 19:42:02 Europe/Berlin] Hi
-[06-Feb-2015 19:52:07 Europe/Berlin] PHP Fatal error:  Class 'db' not found in /home/student/m2059127/public_html/dbs_hjw/includes/init.php on line 45
-[06-Feb-2015 19:53:10 Europe/Berlin] PHP Fatal error:  Class 'db' not found in /home/student/m2059127/public_html/dbs_hjw/includes/init.php on line 45
-[06-Feb-2015 19:53:24 Europe/Berlin] Hi
-[06-Feb-2015 20:01:13 Europe/Berlin] Hi
-[06-Feb-2015 20:06:26 Europe/Berlin] Hi
-[06-Feb-2015 20:51:27 Europe/Berlin] PHP Parse error:  syntax error, unexpected 'user' (T_STRING), expecting ',' or ';' in /home/student/m2059127/public_html/dbs_hjw/views/header.html on line 20
+[08-Feb-2015 04:33:10 Europe/Berlin] PHP Notice:  Array to string conversion in /home/student/m2059127/public_html/dbs_hjw/views/helper.php on line 35
+[08-Feb-2015 04:33:18 Europe/Berlin] PHP Notice:  Array to string conversion in /home/student/m2059127/public_html/dbs_hjw/views/helper.php on line 35
+[08-Feb-2015 04:38:27 Europe/Berlin] PHP Notice:  Array to string conversion in /home/student/m2059127/public_html/dbs_hjw/views/helper.php on line 35
+[08-Feb-2015 04:38:33 Europe/Berlin] PHP Notice:  Array to string conversion in /home/student/m2059127/public_html/dbs_hjw/views/helper.php on line 35
+[08-Feb-2015 04:39:34 Europe/Berlin] PHP Notice:  Array to string conversion in /home/student/m2059127/public_html/dbs_hjw/views/helper.php on line 35
+[08-Feb-2015 04:41:51 Europe/Berlin] PHP Notice:  Array to string conversion in /home/student/m2059127/public_html/dbs_hjw/views/helper.php on line 35

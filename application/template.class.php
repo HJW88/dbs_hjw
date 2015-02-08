@@ -8,7 +8,11 @@
 /**
  * Class Template
  *
- * This class present a view object
+ * This class present a view object.
+ * The template.class.php file contains the class definition.
+ * Like the other classes, it has the registry available to it
+ * and also contains a __set() method in which template variables
+ * may be set and stored.
  */
 Class Template
 {
@@ -47,7 +51,7 @@ Class Template
     }
 
     /**
-     * Render view
+     * Render view from html template file
      *
      * @param $name
      * @return bool
@@ -58,14 +62,13 @@ Class Template
         $path = __SITE_PATH . '/views' . '/' . $name . '.html';
 
         if (file_exists($path) == false) {
-            throw new Exception('Template not found in ' . $path);
+            error_log('Template not found in ' . $path);
             return false;
         }
-
-        // Load variables
-        foreach ($this->vars as $key => $value) {
-            $$key = $value;
-        }
+        /*** Import variables into the current
+         * symbol table from an array
+         ***/
+        extract($this->vars);
         include($path);
     }
 
