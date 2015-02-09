@@ -20,10 +20,10 @@ $inputtag = <<<EOD
 
     <div class="row">
         <div class="small-3 columns">
-          <label for="{name}" class="right inline">{label}</label>
+          <label for="{name}" type="{type}" class="right inline">{label}</label>
         </div>
         <div class="small-9 columns">
-        <input name="{name}" type="{type}" placeholder="{placeholder}" value="{value}" {step} {required}>
+        <input name="{name}" type="{type}" placeholder="{placeholder}" value="{value}" {step} {required} {disabled}>
         </div>
     </div>
 

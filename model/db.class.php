@@ -60,7 +60,6 @@ class db {
         $result = static::getInstance()->query($queryStr);
         if ($result) {
             $this->last = $result;
-            //error_log('OK executing query: ' . $queryStr);
         } else {
             error_log('Error executing query: ' . $queryStr);
         }

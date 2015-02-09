@@ -15,7 +15,7 @@
  *
  *
  */
-Abstract Class baseController
+Abstract Class BaseController
 {
 
     /*
@@ -39,6 +39,7 @@ Abstract Class baseController
 
     function showAlert(){
         $this->registry->template->show('alert');
+        $this->unsetSesstion('alert');
     }
 
     function showHeader($title){
@@ -53,6 +54,10 @@ Abstract Class baseController
 
     function goBack(){
         header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
+    function redirectTo($location){
+        header('Location: ?rt='.$location);
     }
 
     /**

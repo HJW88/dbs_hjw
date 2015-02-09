@@ -30,15 +30,16 @@ class formViewController extends Template{
     /**
      *
      *
-     * @param $tag, can be input, textarea
-     * @param $type, can be text, password, date, email
+     * @param $tag, can be input, textarea,
+     * @param $type, can be text, password, date, email, hidden
      * @param $name, element name
      * @param $label, element string
      * @param null $placeholder, element placeholder
      * @param null $value, value
      * @param bool $required
+     * @param bool $disabled
      */
-    public function addFromNormalInput($tag, $type, $name, $label, $placeholder=null, $value = null, $required = true){
+    public function addFromNormalInput($tag, $type, $name, $label, $placeholder=null, $value = null, $required = true, $disabled=false){
         $this->vars['tags'][$name] = array();
         $this->vars['tags'][$name]['tag'] = $tag;
         $this->vars['tags'][$name]['label'] = $label;
@@ -49,6 +50,7 @@ class formViewController extends Template{
         $this->vars['tags'][$name]['value'] = $value;
         $this->vars['tags'][$name]['placeholder'] = $placeholder ? $placeholder : $label;
         $this->vars['tags'][$name]['required'] = $required? 'required' : '';
+        $this->vars['tags'][$name]['disabled'] = $disabled? 'disabled' : '';
     }
 
     /**

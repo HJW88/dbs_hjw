@@ -9,7 +9,7 @@
  * Class Template
  *
  * This class present a view object.
- * The template.class.php file contains the class definition.
+ * The Template.class.php file contains the class definition.
  * Like the other classes, it has the registry available to it
  * and also contains a __set() method in which template variables
  * may be set and stored.

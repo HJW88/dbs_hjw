@@ -5,8 +5,7 @@
  * Author: HJW88
  */
 
-require_once('formViewController.php');
-Class indexController Extends baseController
+Class indexController Extends BaseController
 {
 
     public function index()
@@ -16,7 +15,9 @@ Class indexController Extends baseController
 
         /*** load the index template ***/
         $this->showHeader('Homepage');
+        $this->showAlert();
 
+        echo (json_encode($_SESSION['user']));
 
         $this->showFooter();
         

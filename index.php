@@ -23,7 +23,7 @@ define ('__SITE_PATH', $site_path);
 include 'includes/init.php';
 
 /*** load the router object to registry ***/
-$registry->router = new router($registry);
+$registry->router = new Router($registry);
 
 /*** set the controller path ***/
 $registry->router->setPath(__SITE_PATH . '/controller');

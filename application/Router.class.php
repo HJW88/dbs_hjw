@@ -12,7 +12,7 @@
  *
  * The basic router rule: ?rt={controller}/action
  */
-class router
+class Router
 {
     /*
     * @the registry
@@ -60,12 +60,6 @@ class router
     {
         /*** check the route ***/
         $this->getController();
-
-        /*** if the file is not there diaf ***/
-        if (is_readable($this->file) == false) {
-            $this->file = $this->path . '/error404.html';
-            $this->controller = 'error404';
-        }
 
         /*** include the controller ***/
         include $this->file;

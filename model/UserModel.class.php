@@ -5,34 +5,31 @@
  * Author: HJW88
  */
 
-class userModel {
-
-    protected $db;
-
-    /**
-     * Every model
-     */
-    public function __construct(){
-        $this->db = new db();
-    }
-
+class UserModel extends BaseModel{
 
     /**
      * Get user information by username,
      * This query must left join on customer table.
      *
      * @param $username
+     * @param $password
      * @return array
      */
-    static public function getUserByUsername($username){
+    static public function getUserByUsername($username, $password=null){
         $user = new userModel();
         $sql = 'SELECT user.*, customernr FROM user LEFT JOIN customer on user.username = customer.username WHERE user.username = "'.$username.'"';
+
+        if ($password){
+            $sql .= ' AND password = "' . $password . '"';
+        }
+
         $user->db->executeQuery($sql);
         if ($user->db->last){
             $row = $user->db->getRows();
             return $row;
         }
     }
+
 
 
     /**

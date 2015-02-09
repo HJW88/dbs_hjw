@@ -11,26 +11,31 @@ ini_set("error_log", __SITE_PATH . "/error.log");
 error_reporting(E_ALL);
 
 /*** include the controller class ***/
-include __SITE_PATH . '/application/' . 'controller_base.class.php';
+include __SITE_PATH . '/application/' . 'BaseController.class.php';
 
 /*** include the registry class ***/
-include __SITE_PATH . '/application/' . 'registry.class.php';
+include __SITE_PATH . '/application/' . 'Registry.class.php';
 
 /*** include the router class ***/
-include __SITE_PATH . '/application/' . 'router.class.php';
+include __SITE_PATH . '/application/' . 'Router.class.php';
 
 /*** include the template class ***/
-include __SITE_PATH . '/application/' . 'template.class.php';
+include __SITE_PATH . '/application/' . 'Template.class.php';
 
 /*** auto load model classes
- * After the application includes, the __autoload function will immediately follow to load class definition files automatically when they are required by the system.
+ * After the application includes,
+ * the __autoload function will immediately follow to load class
+ * definition files automatically when they are required by the system.
  ***/
 function __autoload($class_name)
 {
-    $filename = strtolower($class_name) . '.class.php';
-    $file = __SITE_PATH . '/model/' . $filename;
+    $filename = $class_name. '.class.php';
+    $file1 = __SITE_PATH . '/model/' . $filename;
+    $file2 = __SITE_PATH . '/controller/' . $filename;
 
+    $file = file_exists($file1) ? $file1 : $file2;
     if (file_exists($file) == false) {
+        error_log('Error __autoload() ' . $class_name. $file);
         return false;
     }
     include($file);
@@ -47,6 +52,9 @@ define('__DB_PASS', 'VuzCzHaZ');
 
 /*** create the database registry object ***/
 $registry->db = db::getInstance();
+
+/*** Definde hjw88 as Superuser/ROOT ***/
+define('__ROOT', 'hjw88');
 
 
 
