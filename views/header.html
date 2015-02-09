@@ -1,7 +1,6 @@
 <!doctype html>
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="http://foundation.zurb.com/assets/css/templates/foundation.css"/>
 </head>
@@ -35,24 +34,5 @@
 
 <div class="row">
 
-
-<?php
-
-require_once('helper.php');
-
-$alert = <<<EOD
-<div data-alert class="alert-box {type} radius">
-    {msg}
-</div>
-EOD;
-
-
-if (isset($_SESSION['alert'])){
-
-    foreach($_SESSION['alert'] as $type=>$msg){
-        echo format($alert, array('type' => $type, 'msg' => $msg));
-    }
-
-}
-
-?>
+    <h1><?php echo $title; ?></h1>
+    <hr/>

@@ -50,6 +50,26 @@ Class Template
         $this->vars[$index] = $value;
     }
 
+
+    /**
+     * Load html view view
+     *
+     * @param $view
+     * @return bool|string
+     * @throws Exception
+     */
+    protected function loadViewPath($view){
+        $path1 = __SITE_PATH . '/views' . '/' . $view . '.html';
+        $path2 = __SITE_PATH . '/views' . '/' . $view . '.php';
+        $path = file_exists($path1)? $path1 : $path2;
+        if (file_exists($path) == false) {
+            error_log('Template not found in ' . $path);
+            return false;
+        } else {
+            return $path;
+        }
+    }
+
     /**
      * Render view from html template file
      *
@@ -57,14 +77,9 @@ Class Template
      * @return bool
      * @throws Exception
      */
-    function show($name)
+    public function show($name)
     {
-        $path = __SITE_PATH . '/views' . '/' . $name . '.html';
-
-        if (file_exists($path) == false) {
-            error_log('Template not found in ' . $path);
-            return false;
-        }
+        $path = $this->loadViewPath($name);
         /*** Import variables into the current
          * symbol table from an array
          ***/

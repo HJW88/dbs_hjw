@@ -6,15 +6,13 @@
  */
 
 
-require_once('form.php');
+require_once('helper.php');
 
 
 echo <<<EOD
-<h1>{$title}</h1>
-<hr/>
+<h3>{$title}</h3>
     <form action="?rt={$action}" method="post" enctype="multipart/form-data">
 EOD;
-
 
 
 
@@ -25,7 +23,7 @@ $inputtag = <<<EOD
           <label for="{name}" class="right inline">{label}</label>
         </div>
         <div class="small-9 columns">
-        <input name="{name}" type="{type}" placeholder="{placeholder}" value="{value}" {required}>
+        <input name="{name}" type="{type}" placeholder="{placeholder}" value="{value}" {step} {required}>
         </div>
     </div>
 
@@ -57,7 +55,7 @@ EOD;
 
 
 $selecttag_option = <<<EOD
-<option value="{option}">{option}</option>
+<option value="{value}">{text}</option>
 EOD;
 
 
@@ -82,7 +80,7 @@ EOD;
 
 $rediocontent = <<<EOD
 
-      <input type="radio" name="{name}" value="{option}"><label for="{name}">{option}</label>
+      <input type="radio" name="{name}" value="{value}" {required}><label for="{name}">{text}</label>
 
 EOD;
 
@@ -110,10 +108,10 @@ foreach ($tags as $name=>$data){
             break;
 
         case 'select':
-            echo format($selecttag_head,$data);
+            echo format($selecttag_head, $data);
 
-            foreach($data['options'] as $option){
-                echo format($selecttag_option, array('option'=>$option));
+            foreach($data['options'] as $key=>$option){
+                echo format($selecttag_option, array('value'=>$key, 'text'=>$option));
             }
 
             echo $selecttag_footer;
@@ -122,18 +120,13 @@ foreach ($tags as $name=>$data){
         case 'radio':
             echo format($rediohead, $data);
 
-            foreach($data['options'] as $option){
-                echo format($rediocontent, array('name'=>$name ,  'option'=>$option));
+            foreach($data['options'] as $value=>$text){
+                echo format($rediocontent, array('name'=>$name , 'required'=>$data['required'], 'value'=> $value, 'text'=>$text));
             }
 
             echo $rediofooter;
 
             break;
-
-        case 'checkbox':
-            
-            break;
-
     }
 }
 

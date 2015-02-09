@@ -4,9 +4,16 @@
  * Time: 19:51
  * Author: HJW88
  */
+
+/**
+ * Class db
+ * This class represent the database connection, singleton
+ * And it does all db operation
+ * This can save reduplicate sql query writing
+ */
 class db {
 
-    /*** Declare instance ***/
+    /*** Declare db instance ***/
     private static $instance = NULL;
 
     /*** The last sql result ***/
@@ -16,7 +23,7 @@ class db {
      * the constructor is set to private so
      * so nobody can create a new instance using new
      */
-    private function __construct()
+    public function __construct()
     {
         // do nothing
     }
@@ -34,6 +41,14 @@ class db {
         return self::$instance;
     }
 
+    /***
+     * @param $querystr, the sql query
+     * @return mysqli_stmt, a mysql semt object
+     */
+    public static function getStamentObject($querystr){
+        return self::getInstance()->prepare($querystr);
+    }
+
 
     /**
      * Execute the sql query and store result into $last
@@ -42,12 +57,13 @@ class db {
      */
     final public function executeQuery($queryStr)
     {
-        if (!$result = $this->connection->query($queryStr)) {
-            error_log('Error executing query: ' . $this->connection->error);
-        } else {
+        $result = static::getInstance()->query($queryStr);
+        if ($result) {
             $this->last = $result;
+            //error_log('OK executing query: ' . $queryStr);
+        } else {
+            error_log('Error executing query: ' . $queryStr);
         }
-
     }
 
     /**
@@ -84,7 +100,7 @@ class db {
      * @param array data to insert field => value
      * @return bool
      */
-    final protected function insertRecords($table, $data)
+    final public function insertRecords($table, $data)
     {
         // setup some variables for fields and values
         $fields = "";
@@ -116,7 +132,7 @@ class db {
      * @param int the number of rows to be removed
      * @return void
      */
-    final protected function deleteRecords($table, $condition, $limit)
+    final public function deleteRecords($table, $condition, $limit)
     {
         $limit = ($limit == '') ? '' : ' LIMIT ' . $limit;
         $delete = "DELETE FROM {$table} WHERE {$condition} {$limit}";
@@ -130,7 +146,7 @@ class db {
      * @param String the condition
      * @return bool
      */
-    final protected function updateRecords($table, $changes, $condition)
+    final public function updateRecords($table, $changes, $condition)
     {
         $update = "UPDATE " . $table . " SET ";
         foreach ($changes as $field => $value) {
@@ -153,23 +169,14 @@ class db {
      * @param $condition
      * @return bool
      */
-    final protected function selectRecords($table, $condition){
+    final public function selectRecords($table, $condition=null){
         $select = "SELECT * FROM " . $table ;
-        if ($condition != '') {
+        if ($condition) {
             $select .= "WHERE " . $condition;
         }
-
         $this->executeQuery($select);
-
         return true;
 
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(){
-        return 'Model: '. get_class($this) . json_encode($this);
     }
 
 

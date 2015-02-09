@@ -15,16 +15,10 @@ Class indexController Extends baseController
         $this->registry->template->title = 'HWJ88::HHU';
 
         /*** load the index template ***/
-        $this->registry->template->show('header');
-        //$this->registry->template->show('index');
+        $this->showHeader('Homepage');
 
 
-        $form = new formViewController('Sign','hi');
-        $form->addFromNormalInput('input','text','name','Name','name');
-        $form->show();
-
-        $this->registry->template->show('footer');
-
+        $this->showFooter();
         
     }
 }

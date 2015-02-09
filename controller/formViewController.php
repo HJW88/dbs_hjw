@@ -9,12 +9,17 @@
 /**
  * Class formViewController
  * This controller help to build html form quickly
+ * It generate all useful elements
  */
-class formViewController {
+class formViewController extends Template{
 
     private $vars = array();
 
 
+    /**
+     * @param $title, the form has a title
+     * @param $action, the url to post
+     */
     public function __construct($title,$action){
         $this->vars['title'] = $title;
         $this->vars['action'] = $action;
@@ -25,12 +30,12 @@ class formViewController {
     /**
      *
      *
-     * @param $tag
-     * @param $type
-     * @param $name
-     * @param $label
-     * @param null $placeholder
-     * @param null $value
+     * @param $tag, can be input, textarea
+     * @param $type, can be text, password, date, email
+     * @param $name, element name
+     * @param $label, element string
+     * @param null $placeholder, element placeholder
+     * @param null $value, value
      * @param bool $required
      */
     public function addFromNormalInput($tag, $type, $name, $label, $placeholder=null, $value = null, $required = true){
@@ -39,18 +44,20 @@ class formViewController {
         $this->vars['tags'][$name]['label'] = $label;
         $this->vars['tags'][$name]['name'] = $name;
         $this->vars['tags'][$name]['type'] = $type;
+        // html5 step attribut for type number
+        $this->vars['tags'][$name]['step'] = $type=='number'? 'step="0.01"' : null;
         $this->vars['tags'][$name]['value'] = $value;
         $this->vars['tags'][$name]['placeholder'] = $placeholder ? $placeholder : $label;
         $this->vars['tags'][$name]['required'] = $required? 'required' : '';
     }
 
     /**
-     * Add select/radio form data
-     *
-     * @param $name
-     * @param array $options, array of values
-     * @param $required
-     */
+ * @param $tag, can be select or radio
+ * @param $name, the element name
+ * @param $label, element label
+ * @param array $options, array of {value:text}
+ * @param bool $required, if required
+ */
     public function addFormSelection($tag, $name, $label, $options=array(), $required=true){
         $this->vars['tags'][$name] = array();
         $this->vars['tags'][$name]['tag'] = $tag;
@@ -60,28 +67,11 @@ class formViewController {
         $this->vars['tags'][$name]['options'] = $options;
     }
 
-    /**
-     * Load html view view
-     *
-     * @param $view
-     * @return bool|string
-     * @throws Exception
-     */
-    private function loadViewPath($view){
-        $path = __SITE_PATH . '/views' . '/'. $view .'.php';
-        if (file_exists($path) == false) {
-            error_log('Template not found in ' . $path);
-            return false;
-        } else {
-            return $path;
-        }
-    }
 
     /**
-     * Render view with data stored in vars
      * @param string $view
      */
-    public function show($view='form'){
+    public function showForm($view='form'){
         $path = $this->loadViewPath($view);
         extract($this->vars);
         include($path);
