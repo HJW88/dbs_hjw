@@ -41,6 +41,9 @@ class db {
         return self::$instance;
     }
 
+    public static function getLastInsertID(){
+        return mysqli_insert_id(self::getInstance());
+    }
     /***
      * @param $querystr, the sql query
      * @return mysqli_stmt, a mysql semt object
@@ -60,6 +63,7 @@ class db {
         $result = static::getInstance()->query($queryStr);
         if ($result) {
             $this->last = $result;
+//            error_log('OK executing query: ' . $queryStr);
         } else {
             error_log('Error executing query: ' . $queryStr);
         }
@@ -171,11 +175,10 @@ class db {
     final public function selectRecords($table, $condition=null){
         $select = "SELECT * FROM " . $table ;
         if ($condition) {
-            $select .= "WHERE " . $condition;
+            $select .= " WHERE " . $condition;
         }
         $this->executeQuery($select);
         return true;
-
     }
 
 

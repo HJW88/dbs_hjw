@@ -111,7 +111,7 @@ class Router
         }
 
         /*** set the file path ***/
-        $this->file = $this->path . '/' . $this->controller . 'Controller.php';
+        $this->file = $this->path . '/' . $this->controller . 'Controller.class.php';
     }
 
 

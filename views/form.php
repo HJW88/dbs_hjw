@@ -36,7 +36,7 @@ $textareatag = <<<EOD
           <label for="{name}" class="right inline">{label}</label>
         </div>
         <div class="small-9 columns">
-        <textarea name="{name}" type="{type}" placeholder="{placeholder}" value="{value}" {required}></textarea>
+        <textarea name="{name}" type="{type}" placeholder="{placeholder}" rows ="10" {required}>{value}</textarea>
         </div>
     </div>
 
@@ -102,6 +102,7 @@ foreach ($tags as $name=>$data){
         case 'input':
             echo format($inputtag, $data);
             break;
+
 
         case 'textarea':
             echo format($textareatag, $data);

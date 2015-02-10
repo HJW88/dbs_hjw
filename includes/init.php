@@ -17,7 +17,7 @@ include __SITE_PATH . '/application/' . 'BaseController.class.php';
 include __SITE_PATH . '/application/' . 'Registry.class.php';
 
 /*** include the router class ***/
-include __SITE_PATH . '/application/' . 'Router.class.php';
+include __SITE_PATH . '/application/' . 'router.class.php';
 
 /*** include the template class ***/
 include __SITE_PATH . '/application/' . 'Template.class.php';
@@ -56,5 +56,8 @@ $registry->db = db::getInstance();
 /*** Definde hjw88 as Superuser/ROOT ***/
 define('__ROOT', 'hjw88');
 
+/*** Define upload directory **/
+define('__UPLOADS', __SITE_PATH.'/uploads/');
+define('__MEDIALOCATION', 'uploads/');
 
 
