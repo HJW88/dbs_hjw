@@ -11,13 +11,13 @@
  * And it does all db operation
  * This can save reduplicate sql query writing
  */
-class db {
+class DBModel {
 
     /*** Declare db instance ***/
     private static $instance = NULL;
 
     /*** The last sql result ***/
-    public $last;
+    public $result;
 
     /**
      * the constructor is set to private so
@@ -41,7 +41,11 @@ class db {
         return self::$instance;
     }
 
-    public static function getLastInsertID(){
+    /**
+     *
+     * @return int|string
+     */
+    public function getLastInsertID(){
         return mysqli_insert_id(self::getInstance());
     }
     /***
@@ -54,15 +58,14 @@ class db {
 
 
     /**
-     * Execute the sql query and store result into $last
-     *
-     * @param $queryStr SQL statement
+     * @param $queryStr
      */
     final public function executeQuery($queryStr)
     {
         $result = static::getInstance()->query($queryStr);
+
         if ($result) {
-            $this->last = $result;
+            $this->result = $result;
 //            error_log('OK executing query: ' . $queryStr);
         } else {
             error_log('Error executing query: ' . $queryStr);
@@ -76,7 +79,15 @@ class db {
      */
     final function getRows()
     {
-        return $this->last->fetch_array(MYSQLI_ASSOC);
+        return $this->result->fetch_array(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Fetch one row as assoc array
+     * @return mixed
+     */
+    final function getRow(){
+        return $this->result->fetch_assoc();
     }
 
     /**
@@ -85,7 +96,7 @@ class db {
      */
     final function numRows()
     {
-        return $this->last->num_rows;
+        return $this->result->num_rows;
     }
 
     /**
@@ -94,7 +105,7 @@ class db {
      */
     public function affectedRows()
     {
-        return $this->last->affected_rows;
+        return $this->result->affected_rows;
     }
 
     /**
@@ -132,13 +143,11 @@ class db {
      * Delete records from the database
      * @param String the table to remove rows from
      * @param String the condition for which rows are to be removed
-     * @param int the number of rows to be removed
      * @return void
      */
-    final public function deleteRecords($table, $condition, $limit)
+    final public function deleteRecords($table, $condition)
     {
-        $limit = ($limit == '') ? '' : ' LIMIT ' . $limit;
-        $delete = "DELETE FROM {$table} WHERE {$condition} {$limit}";
+        $delete = "DELETE FROM {$table} WHERE {$condition}";
         $this->executeQuery($delete);
     }
 
@@ -163,8 +172,6 @@ class db {
         }
 
         $this->executeQuery($update);
-
-        return true;
     }
 
     /**

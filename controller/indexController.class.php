@@ -16,9 +16,6 @@ Class indexController Extends BaseController
         /*** load the index template ***/
         $this->showHeader('Homepage');
         $this->showAlert();
-
-        echo (json_encode($_SESSION['user']));
-
         $this->showFooter();
         
     }

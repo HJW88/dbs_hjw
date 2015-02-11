@@ -5,7 +5,7 @@
  * Author: HJW88
  */
 
-class UserModel extends BaseModel{
+class UserModel {
 
     /**
      * Get user information by username,
@@ -16,16 +16,28 @@ class UserModel extends BaseModel{
      * @return array
      */
     static public function getUserByUsername($username, $password=null){
-        $user = new userModel();
-        $sql = 'SELECT user.*, customernr FROM user LEFT JOIN customer on user.username = customer.username WHERE user.username = "'.$username.'"';
+        $model = new DBModel();
+        $sql = 'SELECT * FROM user WHERE username =  "'.$username.'"';
 
         if ($password){
             $sql .= ' AND password = "' . $password . '"';
         }
 
-        $user->db->executeQuery($sql);
-        if ($user->db->last){
-            $row = $user->db->getRows();
+        $model->executeQuery($sql);
+        if ($model->result){
+            $row = $model->getRows();
+            return $row;
+        }
+    }
+
+
+    static public function getUserByUserID($userID){
+        $model = new DBModel();
+        $sql = 'SELECT * FROM user WHERE id ='.(int)$userID;
+
+        $model->executeQuery($sql);
+        if ($model->result){
+            $row = $model->getRows();
             return $row;
         }
     }
@@ -38,16 +50,23 @@ class UserModel extends BaseModel{
      * @return array
      */
     static public function createUser($data){
-        $user = new userModel();
-        $stm = $user->db->getStamentObject('INSERT INTO user (username, firstname, lastname, email, gender, password) VALUE (?, ?, ?,?,?,?)');
-        $stm->bind_param('ssssss', $data['username'], $data['firstname'], $data['lastname'], $data['email'], $data['gender'], $data['password1']);
+        $model = new DBModel();
+        $stm = $model->getStamentObject('INSERT INTO user (username, firstname, lastname, email, gender, password, is_admin) VALUE (?, ?, ?,?,?,?,?)');
+        $stm->bind_param('ssssssi', $data['username'], $data['firstname'], $data['lastname'], $data['email'], $data['gender'], $data['password1'], $data['is_admin']);
         if ($stm->execute()) {
-            if ($data['type'] == 'Customer') {
-                $user->db->insertRecords('customer', array('username' => $data['username']));
-            }
             return self::getUserByUsername($data['username']);
         } else {
             error_log(get_class(self) . ' Error createUser' . json_encode($data));
+        }
+    }
+
+    static public function updateUser($userID, $data){
+        $model = new DBModel();
+        $model->updateRecords('user', $data, ' id='.(int)$userID);
+        if ($model->result){
+            return self::getUserByUserID($userID);
+        } else {
+            return false;
         }
     }
 

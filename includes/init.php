@@ -17,7 +17,7 @@ include __SITE_PATH . '/application/' . 'BaseController.class.php';
 include __SITE_PATH . '/application/' . 'Registry.class.php';
 
 /*** include the router class ***/
-include __SITE_PATH . '/application/' . 'router.class.php';
+include __SITE_PATH . '/application/' . 'Router.class.php';
 
 /*** include the template class ***/
 include __SITE_PATH . '/application/' . 'Template.class.php';
@@ -51,7 +51,7 @@ define('__DB_USER', 'm2059127');
 define('__DB_PASS', 'VuzCzHaZ');
 
 /*** create the database registry object ***/
-$registry->db = db::getInstance();
+$registry->db = DBModel::getInstance();
 
 /*** Definde hjw88 as Superuser/ROOT ***/
 define('__ROOT', 'hjw88');

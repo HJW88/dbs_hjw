@@ -15,7 +15,21 @@ class userController extends BaseController
 
     public function index()
     {
-        echo "User";
+        if ($user = userController::getLoginUser()) {
+            $this->showHeader('My Account');
+            $this->showAlert();
+
+
+            // update form
+            $this->showUpdateUserForm($user);
+            // order list
+            $this->showOrdeList();
+
+            $this->showFooter();
+        } else {
+            $this->setSesstion('alert','warning','Please Login');
+            $this->redirectTo('user/login');
+        }
     }
 
     public function signup()
@@ -42,6 +56,7 @@ class userController extends BaseController
                     $this->redirectTo('user/signup');
                     break;
                 } else {
+                    $_POST['is_admin'] = $_POST['type'] =='Admin'? true : false;
                     $user = UserModel::createUser($_POST);
                     $this->setSesstion('alert', 'success', 'Sign Up success!');
                     $this->loginUser($user);
@@ -79,6 +94,40 @@ class userController extends BaseController
         $this->unsetSesstion('user');
         $this->redirectTo('index');
     }
+
+
+    public function update(){
+
+        if (!userController::isRoot() && !userController::isTestUser()){
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // todo
+                if ($_POST['password1'] != $_POST['password2']) {
+                    $this->setSesstion('alert', 'warning', 'Password must be the same');
+                    $this->redirectTo('user/signup');
+                    return;
+                }
+
+                $data = array('email'=>$_POST['email'], 'password'=>$_POST['password1'], 'firstname'=>$_POST['firstname'], 'lastname'=>$_POST['lastname'],'gender'=>$_POST['gender']);
+
+                if ($user = UserModel::updateUser($_POST['id'],$data)){
+
+                    // update session
+                    foreach($user as $key => $value){
+                        $this->setSesstion('user',$key,$value);
+                    }
+                    $this->setSesstion('alert','success','User successfully modified');
+                }
+
+
+            }
+
+        } else {
+            $this->setSesstion('alert','alert','Permission Denney, this default user can not be modified');
+        }
+        $this->redirectTo('user');
+    }
+
 
     /**
      * @param $user
@@ -118,6 +167,26 @@ class userController extends BaseController
         $form->showForm();
     }
 
+
+    private function showUpdateUserForm($user){
+
+        $form = new formViewController('Update your information','user/update');
+
+        $form->addFromNormalInput('input','hidden','id','',$user['id'],$user['id']);
+        $form->addFromNormalInput('input', 'email', 'email', 'Email', $user['email']);
+        $form->addFromNormalInput('input', 'password', 'password1', 'Password1', 'Password1');
+        $form->addFromNormalInput('input', 'password', 'password2', 'Password2', 'Password2');
+
+        $form->addFromNormalInput('input', 'text', 'firstname', 'Firstname', $user['firstname']);
+        $form->addFromNormalInput('input', 'text', 'lastname', 'Lastname',$user['lastname']);
+
+        $form->addFormSelection('select', 'gender', 'Gender', array('Male' => 'Male',
+            'Female' => 'Female'));
+
+        $form->showForm();
+
+    }
+
     /**
      * Show login form
      */
@@ -127,6 +196,21 @@ class userController extends BaseController
         $form->addFromNormalInput('input', 'text', 'username', 'Username', 'Username');
         $form->addFromNormalInput('input', 'password', 'password', 'Password', 'Password');
         $form->showForm();
+    }
+
+
+    private function showOrdeList(){
+
+        if (self::isAdmin()){
+
+        } else {
+        if ($user = self::getLoginUser()){
+            if ($oderlist = ProductModel::getOrderList($user['id'])){
+                $this->registry->template->orderlist = $oderlist;
+                $this->registry->template->show('orderlist');
+            }
+        }
+        }
     }
 
     /**
@@ -145,9 +229,22 @@ class userController extends BaseController
         }
     }
 
-    public static function isCustomer(){
+    public static function isTestUser(){
+        if (isset($_SESSION['user'])){
+            if ($_SESSION['user']['username'] == 'testuser'){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static function isAdmin(){
+
         if (isset($_SESSION['user']))
-            if ($_SESSION['user']['customernr']) {
+            if ($_SESSION['user']['is_admin']) {
                 return true;
             } else {
                 return false;
@@ -155,5 +252,14 @@ class userController extends BaseController
             return false;
         }
     }
+
+    public static function getLoginUser(){
+        if (isset($_SESSION['user'])){
+            return $_SESSION['user'];
+        } else {
+            return null;
+        }
+    }
+
 
 }

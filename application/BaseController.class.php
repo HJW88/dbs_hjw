@@ -52,10 +52,6 @@ Abstract Class BaseController
     }
 
 
-    function goBack(){
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-    }
-
     function redirectTo($location){
         header('Location: ?rt='.$location);
     }

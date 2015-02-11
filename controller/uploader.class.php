@@ -25,13 +25,13 @@ class uploader
     public static function getUploadImageUrl()
     {
         $target_dir = __UPLOADS;
-        $url = self::clean(basename($_FILES["image"]["name"]));
+        $url = strtolower(self::clean(basename($_FILES["image"]["name"])));
         $target_file = $target_dir . $url;
         $uploadOk = 1;
         $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
         // Check if file already exists
-        if (file_exists($target_file)) {
+        if (file_exists($target_file) && !is_dir($target_file)) {
             return __MEDIALOCATION. $url;
         }
         // Check file size
@@ -48,14 +48,13 @@ class uploader
         }
         // Check if $uploadOk is set to 0 by an error
         if ($uploadOk == 0) {
+            error_log('Error uploading image'.$url);
             return null;
             // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                $_SESSION['alert']['success'] = "The file has been uploaded.";
                 return __MEDIALOCATION.$url;
             } else {
-                $_SESSION['alert']['alert'] = "The file can not be uploaded.";
                 return null;
             }
         }

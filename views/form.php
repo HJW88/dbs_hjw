@@ -9,10 +9,19 @@
 require_once('helper.php');
 
 
-echo <<<EOD
+if ($small){
+    echo <<<EOD
+<h3>{$title}</h3>
+    <form class="large-6 columns" action="?rt={$action}" method="post" enctype="multipart/form-data">
+EOD;
+
+} else {
+    echo <<<EOD
 <h3>{$title}</h3>
     <form action="?rt={$action}" method="post" enctype="multipart/form-data">
 EOD;
+
+}
 
 
 
@@ -110,7 +119,6 @@ foreach ($tags as $name=>$data){
 
         case 'select':
             echo format($selecttag_head, $data);
-
             foreach($data['options'] as $key=>$option){
                 echo format($selecttag_option, array('value'=>$key, 'text'=>$option));
             }
@@ -120,7 +128,6 @@ foreach ($tags as $name=>$data){
 
         case 'radio':
             echo format($rediohead, $data);
-
             foreach($data['options'] as $value=>$text){
                 echo format($rediocontent, array('name'=>$name , 'required'=>$data['required'], 'value'=> $value, 'text'=>$text));
             }
@@ -134,14 +141,10 @@ foreach ($tags as $name=>$data){
 
 echo <<<EOD
     <div class="row">
-
-        <div class="small-3 columns">
-        </div>
-
+        <div class="small-3 columns"></div>
         <div class="small-9 columns">
             <input class="button small" type="submit" value="submit">
         </div>
-
     </div>
 </form>
 EOD;

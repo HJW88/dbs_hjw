@@ -24,38 +24,135 @@ class productController extends BaseController
 
     public function view()
     {
-        echo 'view product' . $_GET['id'];
+        if (isset($_GET['id'])) {
+            if ($product = ProductModel::getProductByID($_GET['id'])) {
+                $this->showHeader($product['name']);
+                $this->showAlert();
+                // show product box
+                $productOverview = ProductModel::getAllProducts('id = ' . $product['id']);
+                $this->registry->template->products = $productOverview;
+                $this->registry->template->show('product_box');
+
+                // if admin show product edit form
+                if (userController::isAdmin()) {
+                    $this->showProductForm('Edit Product', 'product/edit&id=' . $product['id'], true, $product);
+
+                } else {
+                    $this->showOrderForm($product);
+                }
+
+                // recommend products
+                $this->showRecommendsProductsPanel($product['id']);
+                $this->showFooter();
+            } else {
+                $this->setSesstion('alert', 'warning', 'Product does not exist');
+                $this->redirectTo('product');
+            }
+        } else {
+            $this->setSesstion('alert', 'warning', 'Permision Denney');
+            $this->redirectTo('index');
+        }
     }
 
-    public function delete(){
+    public function delete()
+    {
         //@todo
     }
 
-    public function edit()
+
+    public function related()
     {
-        switch ($_SERVER['REQUEST_METHOD']) {
-
-            case 'GET':
-
-                if ($product = ProductModel::getProductByID($_GET['id'])){
-                    $this->showHeader('Edit Product: ' . $product['name']);
-                    $this->showAlert();
-                    $this->showProductForm('Product Detail','product/edit',$product);
-                    $this->showFooter();
+        if (!userController::isAdmin()) {
+            $this->setSesstion('alert', 'warning', 'Permission Denney');
+            $this->redirectTo('product');
+        } else {
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                if (isset($_GET['id1']) && isset($_GET['id2']) && isset($_GET['action'])) {
+                    if (ProductModel::doRelatedProduct($_GET['id1'], $_GET['id2'], $_GET['action'])) {
+                        $this->setSesstion('alert', 'success', 'Modify Related Product Success');
+                    } else {
+                        $this->setSesstion('alert', 'success', 'Modify Related Product Failed');
+                    }
+                    $this->redirectTo('product/view&id=' . $_GET['id1'] . '#related');
                 }
-                break;
-
-            case 'POST':
-
-                break;
-
+            } else {
+                $this->setSesstion('alert', 'warning', 'Parameter wrong');
+                $this->redirectTo('product');
+            }
         }
     }
+
+
+    public function edit()
+    {
+        if (!userController::isAdmin()) {
+            $this->redirectTo('product');
+        } else {
+
+            switch ($_SERVER['REQUEST_METHOD']) {
+
+                case 'GET':
+                    $product = ProductModel::getProductByID($_GET['id']);
+
+                    if (!$product) {
+                        $this->setSesstion('alert', 'alert', 'Product does not exist');
+                        $this->redirectTo('product/view&id=' . $_GET['id']);
+                        break;
+
+                    } else {
+                        $this->showHeader('Edit Product: ' . $product['name']);
+                        $this->showAlert();
+                        $this->showProductForm('Product Detail', 'product/edit', false, $product);
+                        $this->showFooter();
+                        break;
+                    }
+
+
+                case 'POST':
+                    $id = $_POST['id'];
+                    $data = $this->getProductDataFromPost($_POST);
+
+                    if (ProductModel::updateProduct($id, $data)) {
+                        $exemplar = explode(',', $_POST['exemplar']);
+                        ProductModel::doUpdateProductExemplar($exemplar, $_POST['id']);
+                        $this->setSesstion('alert', 'success', 'Product Updated Successful!');
+                        $this->redirectTo('product/view&id=' . $id);
+                    } else {
+                        $this->setSesstion('alert', 'alert', 'Product Updated Failed!');
+                        $this->redirectTo('product/view&id=' . $id);
+                    }
+
+                    break;
+
+            }
+        }
+    }
+
+    /**
+     * Order product
+     */
+    public function order()
+    {
+        if ($user = userController::getLoginUser()) {
+            if (isset($_POST['id']) && isset($_POST['size']) && ($_POST['startDate']) && ($_POST['endDate'])) {
+                if(ProductModel::doOrder($user['id'], $_POST['id'], $_POST['size'], $_POST['startDate'], $_POST['endDate'], 'add')){
+                    $this->setSesstion('alert','success','Order Succeed, Thank you!');
+                    $this->redirectTo('user/index');
+                }
+            }
+        } else {
+            $this->setSesstion('alert', 'warning', 'Please login');
+            $this->redirectTo('user/login');
+        }
+    }
+
+    /**
+     * Action: add product
+     */
     public function add()
     {
-        if (userController::isCustomer()) {
-            $this->setSesstion('alert', 'warning', 'Permission denney!');
-            $this->redirectTo('index');
+        if (!userController::isAdmin()) {
+            $this->redirectTo('product');
         } else {
 
             switch ($_SERVER['REQUEST_METHOD']) {
@@ -75,16 +172,17 @@ class productController extends BaseController
                         $this->redirectTo('product/add');
                     } else {
                         $url = uploader::getUploadImageUrl();
+                        $data = $this->getProductDataFromPost($_POST);
 
-                        if ($url) {
-                            if ($product = ProductModel::addProduct($_POST, $url)) {
-                                $this->setSesstion('alert', 'success', 'Product Add Ok!');
-                                $this->redirectTo('product');
-                            } else {
-                                $this->setSesstion('alert', 'alert', 'Product Add failed!');
-                                $this->redirectTo('product');
-                            }
+                        if ($product = ProductModel::addProduct($data, $url)) {
+
+                            $exemplar = explode(',', $_POST['exemplar']);
+                            ProductModel::doUpdateProductExemplar($exemplar, $product['id']);
+
+                            $this->setSesstion('alert', 'success', 'Product Add Ok!');
+                            $this->redirectTo('product/view&id=' . $product['id']);
                         } else {
+                            $this->setSesstion('alert', 'alert', 'Product Add failed!');
                             $this->redirectTo('product/add');
                         }
                     }
@@ -94,26 +192,94 @@ class productController extends BaseController
     }
 
 
-    protected function showProductForm($title, $action, $product = null)
+    /**
+     * Show a form for product adding or editing
+     * @param $title , form title
+     * @param $action , the action
+     * @param $admin , if in admin/edit model
+     * @param null $product , if adding new product, set this to null
+     */
+    protected function showProductForm($title, $action, $admin, $product = null)
     {
 
-        $form = new formViewController($title, $action);
+        $form = new formViewController($title, $action, $admin);
 
+        // old product has id
         if ($product) {
-            $form->addFromNormalInput('input', 'hidden', 'id', '', $product['id'], $product['id'], true, true);
+            $form->addFromNormalInput('input', 'hidden', 'id', '', $product['id'], $product['id'], true, false);
         }
 
         $form->addFromNormalInput('input', 'text', 'name', 'Product Name', $product ? $product['name'] : null, $product ? $product['name'] : null);
         $form->addFromNormalInput('textarea', 'text', 'description', 'Product Description', null, $product ? $product['description'] : null);
+
+        // new adding product can add image
         if (!$product) {
-            $form->addFromNormalInput('input', 'file', 'image', 'Product Image', $product ? $product['url'] : null, $product ? $product['url'] : null);
+            $form->addFromNormalInput('input', 'file', 'image', 'Product Image', $product ? $product['url'] : null, $product ? $product['url'] : null, false);
         }
+
+        $form->addFromNormalInput('input', 'text', 'exemplar', 'Exemplars,Use <kbd>,</kbd> as delimeter', $product ? $product['exemplar'] : null, $product ? $product['exemplar'] : null);
         $form->addFromNormalInput('input', 'number', 'price', 'Price', $product ? $product['price'] : null, $product ? $product['price'] : null);
         $form->addFromNormalInput('input', 'number', 'shipping', 'Shipping Cost:', $product ? $product['shipping'] : null, $product ? $product['shipping'] : null);
         $form->addFormSelection('radio', 'gender', 'Gender', array('Male' => 'Male', 'Female' => 'Female', 'Natural' => 'Natural'));
-        $form->addFormSelection('radion', 'type', 'Type', array('Costume' => 'Costume', 'Accessory' => 'Accessory'));
+        $form->addFormSelection('radio', 'type', 'Type', array('Costume' => 'Costume', 'Accessory' => 'Accessory'));
 
         $form->showForm();
+    }
+
+
+    /**
+     * Helper, to get product data from post
+     * @param $post
+     * @return array
+     */
+    private function getProductDataFromPost($post)
+    {
+        $data = array();
+        $data['name'] = $post['name'];
+        $data['description'] = $post['description'];
+        $data['price'] = $post['price'];
+        $data['shipping'] = $post['shipping'];
+        $data['gender'] = $post['gender'];
+        $data['type'] = $post['type'];
+        return $data;
+    }
+
+
+    private function showOrderForm($product)
+    {
+        $form = new formViewController('Borrow This Product', 'product/order', true);
+
+        $form->addFromNormalInput('input', 'hidden', 'id', '', '', $product['id']);
+        $exemplar = array();
+        foreach (explode(',', $product['exemplar']) as $size) {
+            $exemplar[$size] = $size;
+        }
+        $form->addFormSelection('select', 'size', 'Size', $exemplar);
+        $form->addFromNormalInput('input', 'date', 'startDate', 'Start Date');
+        $form->addFromNormalInput('input', 'date', 'endDate', 'End Date');
+        $form->showForm();
+
+    }
+
+    /***
+     * Show the related products panel,
+     * if in admin model, then split the panel in two columns
+     * @param $productID
+     */
+    private function showRecommendsProductsPanel($productID)
+    {
+
+        $releated = ProductModel::getAllRelatedProductByProductID($productID);
+        $this->registry->template->related = $releated;
+
+        if (userController::isAdmin()) {
+            $this->registry->template->admin = true;
+            $this->registry->template->id1 = (int)$productID;
+            $this->registry->template->norelated = ProductModel::getAllRelatedProductByProductID($productID, false);
+        }
+
+        $this->registry->template->show('related');
+
     }
 
 

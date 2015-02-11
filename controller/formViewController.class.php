@@ -19,10 +19,12 @@ class formViewController extends Template{
     /**
      * @param $title, the form has a title
      * @param $action, the url to post
+     * @param $small, boolean, denote if in small model
      */
-    public function __construct($title,$action){
+    public function __construct($title,$action, $small=false){
         $this->vars['title'] = $title;
         $this->vars['action'] = $action;
+        $this->vars['small'] = $small;
         $this->vars['tags'] = array();
     }
 
@@ -37,7 +39,7 @@ class formViewController extends Template{
      * @param null $placeholder, element placeholder
      * @param null $value, value
      * @param bool $required
-     * @param bool $disabled
+     * @param bool $disabled, if this disabled, then no data will be retrieved
      */
     public function addFromNormalInput($tag, $type, $name, $label, $placeholder=null, $value = null, $required = true, $disabled=false){
         $this->vars['tags'][$name] = array();
