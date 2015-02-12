@@ -12,7 +12,7 @@ require_once('helper.php');
 if ($small){
     echo <<<EOD
 <h3>{$title}</h3>
-    <form class="large-6 columns" action="?rt={$action}" method="post" enctype="multipart/form-data">
+    <form class="large-8 columns" action="?rt={$action}" method="post" enctype="multipart/form-data">
 EOD;
 
 } else {

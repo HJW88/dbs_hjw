@@ -89,13 +89,13 @@ EOD;
 $title_normal = <<<EOD
 
 <hr/>
-<h2 id="related">Related Product</h2>
+<h3 id="related">Related Product</h3>
 
 EOD;
 
 $title_admin = <<<EOD
 <hr/>
-<h2 id="related">Modify Related Product</h2>
+<h3 id="related">Modify Related Product</h3>
 EOD;
 
 

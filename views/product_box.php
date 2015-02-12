@@ -47,7 +47,7 @@ if (isset($products) and !empty($products)) {
     foreach ($products as $product) {
         echo format($head, $product);
 
-        if ($product['url']){
+        if (isset($product['url'])){
             echo format($image, $product);
         }
 

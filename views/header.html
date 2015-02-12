@@ -17,7 +17,7 @@
             <li class="divider"></li>
             <?php if(isset($_SESSION['user'])){
                 if ($_SESSION['user']['is_admin']){
-                    echo '<li><a class="button alert" href="#">Admin Model</a></li>';
+                    echo '<li><a class="button alert" href="?rt=admin">Admin Panel</a></li>';
                     echo '<li class="divider"></li>';
                 }
                 echo '<li><a href="?rt=user">' . $_SESSION['user']['username'] .'\'s Account</a></li>';

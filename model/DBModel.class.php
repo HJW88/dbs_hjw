@@ -79,7 +79,17 @@ class DBModel {
      */
     final function getRows()
     {
-        return $this->result->fetch_array(MYSQLI_ASSOC);
+        $data = array();
+
+        while ($row = $this->result->fetch_assoc()){
+            $data[] = $row;
+        }
+
+        if (sizeof($data)!=0){
+            return $data;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -124,7 +134,7 @@ class DBModel {
         foreach ($data as $f => $v) {
 
             $fields .= "`$f`,";
-            $values .= (is_numeric($v) && (intval($v) == $v)) ? $v . "," : "'$v',";
+            $values .= (is_numeric($v) && (intval($v) == $v)) ? $v . "," : trim(strip_tags("'$v',"));
 
         }
 

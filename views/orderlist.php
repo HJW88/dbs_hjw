@@ -50,7 +50,7 @@ require_once('helper.php');
 
 
 if (isset($admin)){
-    // admin model
+    // admin model todo
 
 
 

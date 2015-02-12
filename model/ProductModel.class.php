@@ -81,13 +81,9 @@ SQL;
 
         $model = new DBModel();
         $model->executeQuery($sql);
-        if ($model->numRows() > 0) {
-            $products = array();
-            while ($row = $model->getRows()) {
-                $products[] = $row;
-            }
-            return $products;
 
+        if ($model->result){
+            return $model->getRows();
         }
 
     }

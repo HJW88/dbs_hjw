@@ -36,10 +36,14 @@ class productController extends BaseController
                 // if admin show product edit form
                 if (userController::isAdmin()) {
                     $this->showProductForm('Edit Product', 'product/edit&id=' . $product['id'], true, $product);
-
                 } else {
                     $this->showOrderForm($product);
+                    $this->registry->template->description = $product['description'];
+                    $this->registry->template->show('product_description');
                 }
+
+                // event and themes
+                $this->showEventOrThemeTable($product['id']);
 
                 // recommend products
                 $this->showRecommendsProductsPanel($product['id']);
@@ -280,6 +284,25 @@ class productController extends BaseController
 
         $this->registry->template->show('related');
 
+    }
+
+
+    private function showEventOrThemeTable($productID){
+
+        $events = ETModel::getAllETByProductID('event',$productID);
+        $themes = ETModel::getAllETByProductID('theme',$productID);
+        $this->registry->template->productID = $productID;
+        $this->registry->template->admin = userController::isAdmin();
+
+        // show events
+        $this->registry->template->type = 'event';
+        $this->registry->template->objects = $events;
+        $this->registry->template->show('eventtheme');
+
+        // show themes
+        $this->registry->template->type = 'theme';
+        $this->registry->template->objects = $themes;
+        $this->registry->template->show('eventtheme');
     }
 
 
