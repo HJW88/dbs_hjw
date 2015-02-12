@@ -100,6 +100,13 @@ $rediofooter = <<<EOD
 
 EOD;
 
+$button =  <<<EOD
+
+    <a class="button {class}" href="{link}">{text}</a>
+
+EOD;
+
+
 
 
 
@@ -134,6 +141,10 @@ foreach ($tags as $name=>$data){
 
             echo $rediofooter;
 
+            break;
+
+        case 'button':
+            echo format($button, $data);
             break;
     }
 }

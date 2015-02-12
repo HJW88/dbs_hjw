@@ -42,11 +42,17 @@ class productController extends BaseController
                     $this->registry->template->show('product_description');
                 }
 
+                // image pannel
+                $this->showImagesPanel($product);
+
                 // event and themes
                 $this->showEventOrThemeTable($product['id']);
 
                 // recommend products
                 $this->showRecommendsProductsPanel($product['id']);
+
+
+
                 $this->showFooter();
             } else {
                 $this->setSesstion('alert', 'warning', 'Product does not exist');
@@ -305,5 +311,14 @@ class productController extends BaseController
         $this->registry->template->show('eventtheme');
     }
 
+
+    private function showImagesPanel($product){
+        $this->registry->template->product = $product;
+        $images = ProductModel::getAllImageByProductID($product['id']);
+        $this->registry->template->alt = $product['name'];
+        $this->registry->template->images = $images;
+        $this->registry->template->admin = userController::isAdmin();
+        $this->registry->template->show('imagepanel');
+    }
 
 }

@@ -13,6 +13,20 @@ class ETModel
 {
 
 
+    public static function getETByTypeID($type, $id){
+
+        $model = new DBModel();
+        $model->selectRecords($type, 'id='.(int)$id);
+
+        if ($model->result){
+            return $model->getRow();
+        } else {
+            return null;
+        }
+
+
+    }
+
     /**
      * Add record into event or theme table depends on the given type
      * @param $type , event or theme
@@ -31,6 +45,16 @@ class ETModel
             return false;
         }
 
+    }
+
+    public static function updateETRecord($type, $id, $name, $description){
+        $model = new DBModel();
+        $model->updateRecords($type, array('name' => trim(strip_tags($name)), 'description' => trim(strip_tags($description))), 'id='.(int)$id);
+        if ($model->result){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

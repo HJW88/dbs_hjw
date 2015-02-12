@@ -6,7 +6,8 @@
  */
 
 $title_normal = <<<EOD
-<table class="large-8 colums" id="{type}">
+<hr/>
+<table class="large-12 colums" id="{type}">
 <caption>Related {type}</caption>
 EOD;
 
@@ -56,7 +57,7 @@ $table_body_admin_isrelated = <<<EOD
       <td>{name}</td>
       <td>{description}</td>
       <td><a class="button tiny alert" href="?rt=et/dorelated&id={id}&productID={productID}&action=delete&type={type}">Delete Related</a></td>
-      <td><a class="button tiny warning" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
+      <td><a class="button tiny secondary" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
     </tr>
 EOD;
 
@@ -65,7 +66,7 @@ $table_body_admin_notrelated = <<<EOD
       <td>{name}</td>
       <td>{description}</td>
       <td><a class="button tiny success" href="?rt=et/dorelated&id={id}&productID={productID}&action=add&type={type}">ADD Related</a></td>
-      <td><a class="button tiny warning" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
+      <td><a class="button tiny secondary" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
     </tr>
 EOD;
 
@@ -109,8 +110,20 @@ if (!empty($objects)){
   }
 
   echo $table_tail;
-
 }
+
+if ($admin){
+  echo <<<EOD
+
+<a class="button success right" href="?rt=et/add">Add New {$type}</a>
+
+EOD;
+}
+
+
+
+
+
 
 
 

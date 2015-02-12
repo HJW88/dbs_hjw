@@ -214,6 +214,16 @@ EOD;
         }
     }
 
+    public static function deleteProductImage($imageID){
+        $model = new DBModel();
+        $model->deleteRecords('product_image', 'id='.(int)$imageID);
+        if ($model->result){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * @param $data
@@ -315,5 +325,18 @@ EOD;
         }
 
     }
+
+
+    public static function getAllImageByProductID($productID){
+        $model = new DBModel();
+        $model->selectRecords('product_image', 'product='.(int)$productID);
+        if ($model->result){
+            return $model->getRows();
+        } else {
+            return null;
+        }
+
+    }
+
 
 }

@@ -21,7 +21,44 @@ class etController extends BaseController
 
     public function edit()
     {
-        echo json_encode($_GET);
+        if (userController::isAdmin()){
+
+            switch ($_SERVER['REQUEST_METHOD']) {
+
+                case 'GET':
+                    $title = 'Edit '.$_GET['type'];
+                    $this->showHeader($title);
+                    if (isset($_GET['type']) && isset($_GET['id'])){
+
+                        if($instance = ETModel::getETByTypeID($_GET['type'],$_GET['id'])){
+                            $instance['type'] = $_GET['type'];
+                            $this->showForm($title . ' : ' . $instance['name'], 'et/edit', $instance);
+                        }
+
+                    } else {
+                        echo 'Parameter Wrong';
+                    }
+                    $this->showFooter();
+
+                    break;
+
+                case 'POST':
+
+                    if (ETModel::updateETRecord($_POST['type'],$_POST['id'],$_POST['name'],$_POST['description'])){
+                        $this->setSesstion('alert','success','Update Event or Theme success');
+                    } else {
+                        $this->setSesstion('alert','success','Update Event or Theme success');
+                    }
+                    $this->redirectTo('admin');
+
+                    break;
+
+            }
+
+        } else {
+            $this->setSesstion('alert', 'alert', 'Permission Denney');
+            $this->redirectTo('user');
+        }
 
     }
 
@@ -94,13 +131,14 @@ class etController extends BaseController
 
         $form->addFromNormalInput('input', 'hidden', 'id', '', '', $instance ? $instance['id'] : null);
 
-        $form->addFromNormalInput('input', 'text', 'name', 'Name', 'Name', $instance ? $instance['name'] : null);
+        $form->addFromNormalInput('input', 'text', 'name', 'Name', 'Name', $instance ? $instance['name'] : null,true);
+
         $form->addFromNormalInput('textarea', 'text', 'description', 'Description', 'Description', $instance ? $instance['description'] : null);
 
         if ($instance){
-            $form->addFromNormalInput('input','hidden','type','',$instance['type']);
+            $form->addFromNormalInput('input','hidden','type','','',$instance['type']);
         } else {
-            $form->addFormSelection('select', 'type', 'Type', array('event' => 'Event', 'theme' => 'Theme'));
+            $form->addFormSelection('radio', 'type', 'Type', array('event' => 'Event', 'theme' => 'Theme'));
         }
         $form->showForm();
 

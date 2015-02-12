@@ -71,6 +71,16 @@ class formViewController extends Template{
         $this->vars['tags'][$name]['options'] = $options;
     }
 
+    /**
+     * Add button
+     * @param $text
+     * @param $link
+     * @param null $class
+     */
+    public function addFormButton($text, $link, $class=null){
+        // todo
+    }
+
 
     /**
      * @param string $view
