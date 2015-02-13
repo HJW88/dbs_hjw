@@ -25,7 +25,7 @@ class UserModel {
 
         $model->executeQuery($sql);
         if ($model->result){
-            $row = $model->getRows();
+            $row = $model->getRow();
             return $row;
         }
     }
@@ -37,7 +37,7 @@ class UserModel {
 
         $model->executeQuery($sql);
         if ($model->result){
-            $row = $model->getRows();
+            $row = $model->getRow();
             return $row;
         }
     }

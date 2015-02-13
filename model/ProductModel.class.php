@@ -17,13 +17,23 @@ class ProductModel
     {
         $sql = <<<SQL
 
-SELECT p.id as id, p.name as name, p.description as description,
-      p.price as price, p.shipping as shipping, p.gender as gender, p.type as type,
-      p_comment.rating as rating, p_comment.count as reviews,
-      pp_exemplar.exemplars as exemplars,
-      pp_theme.themes as themes,
-      pp_event.events as events,
-      pp_image.url as url
+SELECT
+
+  p.id as id,
+  p.name as name,
+  p.description as description,
+  p.price as price,
+  p.shipping as shipping,
+  p.gender as gender,
+  p.type as type,
+  p_comment.rating as rating,
+  p_comment.count as reviews,
+  pp_exemplar.exemplars as exemplars,
+  pp_theme.themes as themes,
+  pp_event.events as events,
+  pp_image.url as url
+
+
 FROM product p
   LEFT JOIN
   (
@@ -78,6 +88,7 @@ SQL;
         }
 
         $sql .= " ORDER BY rating DESC";
+
 
         $model = new DBModel();
         $model->executeQuery($sql);
