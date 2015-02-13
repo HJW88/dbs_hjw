@@ -15,9 +15,6 @@ $table_head_normal = <<<EOD
       <th>Price</th>
       <th>Type</th>
       <th>Gender</th>
-      <th>Rating</th>
-      <th>Events</th>
-      <th>Themes</th>
       <th></th>
     </tr>
   </thead>
@@ -47,9 +44,6 @@ $table_body_normal = <<<EOD
       <td>{price}</td>
       <td>{type}</td>
       <td>{gender}</td>
-      <td>{rating}</td>
-      <td>{events}</td>
-      <td>{themes}</td>
       <td><a class="button small" href="?rt=product/view&id={id}">View More</a></td>
     </tr>
 

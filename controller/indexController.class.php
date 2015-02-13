@@ -16,6 +16,7 @@ Class indexController Extends BaseController
         /*** load the index template ***/
         $this->showHeader('Homepage');
         $this->showAlert();
+
         $this->showFooter();
         
     }

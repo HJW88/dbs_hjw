@@ -51,6 +51,8 @@ class productController extends BaseController
                 // recommend products
                 $this->showRecommendsProductsPanel($product['id']);
 
+                // comments
+                $this->showProductComments($product);
 
 
                 $this->showFooter();
@@ -321,4 +323,12 @@ class productController extends BaseController
         $this->registry->template->show('imagepanel');
     }
 
+
+    private function showProductComments($product){
+        $comments = ProductModel::getAllProductCommentsByProductID($product['id']);
+        $this->registry->template->comments = $comments;
+        $this->registry->template->product = $product;
+        $this->registry->template->user = userController::getLoginUser();
+        $this->registry->template->show('commentpanel');
+    }
 }

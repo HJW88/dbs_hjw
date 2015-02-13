@@ -6,7 +6,7 @@
  */
 
 $title_normal = <<<EOD
-<hr/>
+<hr>
 <table class="large-12 colums" id="{type}">
 <caption>Related {type}</caption>
 EOD;

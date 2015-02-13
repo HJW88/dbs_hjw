@@ -23,7 +23,7 @@ class userController extends BaseController
             // update form
             $this->showUpdateUserForm($user);
             // order list
-            $this->showOrdeList();
+            $this->showOrderList();
 
             $this->showFooter();
         } else {
@@ -90,6 +90,7 @@ class userController extends BaseController
 
     public function logout()
     {
+        error_log('User Logout'. $_SESSION['user']['username']);
         $this->setSesstion('alert','success','Logout success! Hope to see you again!');
         $this->unsetSesstion('user');
         $this->redirectTo('index');
@@ -140,6 +141,7 @@ class userController extends BaseController
                 $this->setSesstion('user', $key, $value);
             }
         }
+        error_log('User Login'.json_encode($_SESSION['user']));
         $this->setSesstion('alert', 'success', 'Thanks for your Login!');
         $this->redirectTo('index');
     }
@@ -199,14 +201,14 @@ class userController extends BaseController
     }
 
 
-    private function showOrdeList(){
+    private function showOrderList(){
 
         if (self::isAdmin()){
 
         } else {
         if ($user = self::getLoginUser()){
-            if ($oderlist = ProductModel::getOrderList($user['id'])){
-                $this->registry->template->orderlist = $oderlist;
+            if ($orderlist = ProductModel::getOrderList($user['id'])){
+                $this->registry->template->orderlist = $orderlist;
                 $this->registry->template->show('orderlist');
             }
         }

@@ -339,4 +339,42 @@ EOD;
     }
 
 
+    public static function getAllProductCommentsByProductID($productID){
+        $sql = <<<EOD
+
+SELECT DISTINCT
+
+  user.username as username,
+  comment.rating as rating,
+  comment.text as text,
+  comment.id as id
+
+FROM comment, product, user
+WHERE product.id = comment.product AND comment.customer = user.id AND product.id = {$productID}
+ORDER BY rating
+
+EOD;
+
+        $model = new DBModel();
+        $model->executeQuery($sql);
+        if ($model->result){
+            return $model->getRows();
+        } else {
+            return null;
+        }
+
+    }
+
+
+    public static function addProductComment($productID, $userID, $rating, $text){
+        $model = new DBModel();
+        $model->insertRecords('comment', array('customer'=>$userID,'product'=>$productID,'rating'=>$rating,'text'=>$text));
+        if ($model->result){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
