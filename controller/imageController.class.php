@@ -18,6 +18,12 @@ class imageController extends BaseController
     {
         if (userController::isAdmin() && isset($_GET['id'])){
             if (ProductModel::deleteProductImage($_GET['id'])){
+                try{
+                    unlink(__SITE_PATH.'/'.$_GET['url']);
+
+                } catch (ErrorException $e){
+                    error_log('Delete Image:'.__UPLOADS.$_GET['url']);
+                }
                 $this->setSesstion('alert', 'success', 'Image Delete Success');
             } else {
                 $this->setSesstion('alert', 'alert', 'Image Delete Failed');
@@ -25,7 +31,7 @@ class imageController extends BaseController
         } else {
             $this->setSesstion('alert', 'warning', 'Permission Denney');
         }
-        $this->redirectTo('product/view&id=' . $_POST['product']);
+        $this->redirectTo('product/view&id=' . $_GET['product']);
     }
 
     public function add()

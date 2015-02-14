@@ -25,7 +25,7 @@ $thmbnail_admin = <<<EOD
   <img src="{url}" alt="{alt}">
 </a>
 <br/>
-<a class="button alert tiny" href="?rt=image/delete&id={id}">Delete</a>
+<a class="button alert tiny" href="?rt=image/delete&id={id}&url={url}&product={product}">Delete</a>
 </div>
 
 
@@ -58,7 +58,7 @@ if (!empty($images)) {
 
         if ($admin){
 
-            echo format($thmbnail_admin,array('url'=>$image['url'], 'alt'=>$alt, 'id'=>$image['id']));
+            echo format($thmbnail_admin,array('url'=>$image['url'], 'alt'=>$alt, 'id'=>$image['id'],'product'=>$product['id']));
 
         } else {
             echo format($thmbnail_normal,array('url'=>$image['url'], 'alt'=>$alt, 'id'=>$image['id']));
@@ -72,3 +72,5 @@ if (!empty($images)) {
 if ($admin){
     echo format($uploadButton, array('productID'=>$product['id']));
 }
+
+echo "<hr/>";
