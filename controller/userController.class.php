@@ -207,7 +207,7 @@ class userController extends BaseController
 
         } else {
         if ($user = self::getLoginUser()){
-            if ($orderlist = ProductModel::getOrderList($user['id'])){
+            if ($orderlist = ProductModel::getAllOrderByUserID($user['id'])){
                 $this->registry->template->orderlist = $orderlist;
                 $this->registry->template->show('orderlist');
             }

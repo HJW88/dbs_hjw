@@ -44,7 +44,16 @@ class ETModel
         } else {
             return false;
         }
+    }
 
+    public static function deleteETRecord($type, $id){
+        $model = new DBModel();
+        $model->deleteRecords($type, 'id='.(int)$id);
+        if ($model->result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function updateETRecord($type, $id, $name, $description){
@@ -99,12 +108,23 @@ class ETModel
      * @param $name
      * @return mixed|null
      */
-    public static function getETByTypeName($type, $name)
+    public static function getETByType($type, $name)
     {
         $model = new DBModel();
         $model->selectRecords($type, 'name="' . $name . '"');
         if ($model->result) {
             return $model->getRow();
+        } else {
+            return null;
+        }
+    }
+
+
+    public static function getAllETByCondition($type, $condition){
+        $model = new DBModel();
+        $model->selectRecords($type, $condition);
+        if ($model->result) {
+            return $model->getRows();
         } else {
             return null;
         }

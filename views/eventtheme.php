@@ -34,10 +34,9 @@ $table_head_admin = <<<EOD
 <table>
   <thead>
     <tr>
-      <th width="200">Name</th>
+      <th>Name</th>
       <th>Description</th>
-      <th width="100">Operation</th>
-      <th width="100">Edit</th>
+      <th>Operation</th>
     </tr>
   </thead>
   <tbody>
@@ -47,7 +46,7 @@ EOD;
 $table_body_normal = <<<EOD
     <tr>
       <td>{name}</td>
-      <td witdh="200">{description}</td>
+      <td>{description}</td>
     </tr>
 EOD;
 
@@ -56,8 +55,8 @@ $table_body_admin_isrelated = <<<EOD
     <tr>
       <td>{name}</td>
       <td>{description}</td>
-      <td><a class="button tiny alert" href="?rt=et/dorelated&id={id}&productID={productID}&action=delete&type={type}">Delete Related</a></td>
-      <td><a class="button tiny secondary" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
+      <td><a class="button tiny alert" href="?rt=et/dorelated&id={id}&productID={productID}&action=delete&type={type}">Delete Related</a>
+      <a class="button tiny info" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
     </tr>
 EOD;
 
@@ -65,8 +64,8 @@ $table_body_admin_notrelated = <<<EOD
     <tr>
       <td>{name}</td>
       <td>{description}</td>
-      <td><a class="button tiny success" href="?rt=et/dorelated&id={id}&productID={productID}&action=add&type={type}">ADD Related</a></td>
-      <td><a class="button tiny secondary" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
+      <td><a class="button tiny success" href="?rt=et/dorelated&id={id}&productID={productID}&action=add&type={type}">ADD Related</a>
+      <a class="button tiny info" href="?rt=et/edit&id={id}&type={type}">Edit</a></td>
     </tr>
 EOD;
 

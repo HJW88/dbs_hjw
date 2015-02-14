@@ -63,7 +63,21 @@ class etController extends BaseController
     }
 
     public function delete(){
+        if (userController::isAdmin()){
 
+            if (isset($_GET['id']) && isset($_GET['type'])){
+                if (ETModel::deleteETRecord($_GET['type'], $_GET['id'])){
+                    $this->setSesstion('alert','success','Delete Event or Theme success');
+
+                } else {
+                    $this->setSesstion('alert','success','Delete Event or Theme success');
+                }
+            }
+
+        } else {
+            $this->setSesstion('alert', 'alert', 'Permission Denney');
+        }
+        $this->redirectTo('admin');
     }
 
 
@@ -82,7 +96,7 @@ class etController extends BaseController
 
                 case 'POST':
 
-                    if (ETModel::getETByTypeName($_POST['type'],$_POST['name'])){
+                    if (ETModel::getETByType($_POST['type'],$_POST['name'])){
                         $this->setSesstion('alert','warning','This Event Or Theme already exists');
                         $this->redirectTo('admin');
                         break;

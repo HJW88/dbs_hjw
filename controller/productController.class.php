@@ -68,7 +68,21 @@ class productController extends BaseController
 
     public function delete()
     {
-        //@todo
+        if (userController::isAdmin()){
+
+            if (isset($_GET['id'])){
+                if (ProductModel::deleteProductByCondition('id='.(int)$_GET['id'])){
+                    $this->setSesstion('alert','success','Delete Product success');
+
+                } else {
+                    $this->setSesstion('alert','success','Delete Product success');
+                }
+            }
+
+        } else {
+            $this->setSesstion('alert', 'alert', 'Permission Denney');
+        }
+        $this->redirectTo('admin');
     }
 
 

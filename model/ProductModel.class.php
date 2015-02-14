@@ -271,8 +271,11 @@ EOD;
         }
     }
 
-
-    public static function getOrderList($userID=null){
+    /**
+     * @param null $userID
+     * @return array|null
+     */
+    public static function getAllOrderByUserID($userID=null){
         $sql = <<<EOD
 
 SELECT DISTINCT
@@ -349,8 +352,12 @@ EOD;
 
     }
 
-
-    public static function getAllProductCommentsByProductID($productID){
+    /**
+     * Get all product comments
+     * @param null $productID, if not set, then means get all comment
+     * @return array|null
+     */
+    public static function getAllProductCommentsByProductID($productID=null){
         $sql = <<<EOD
 
 SELECT DISTINCT
@@ -358,13 +365,17 @@ SELECT DISTINCT
   user.username as username,
   comment.rating as rating,
   comment.text as text,
-  comment.id as id
+  comment.id as id,
+  product.name as product
 
 FROM comment, product, user
-WHERE product.id = comment.product AND comment.customer = user.id AND product.id = {$productID}
-ORDER BY rating
+WHERE product.id = comment.product AND comment.customer = user.id
 
 EOD;
+
+        if ($productID){
+            $sql .= 'AND product.id ='.(int)$productID;
+        }
 
         $model = new DBModel();
         $model->executeQuery($sql);
@@ -380,6 +391,16 @@ EOD;
     public static function addProductComment($productID, $userID, $rating, $text){
         $model = new DBModel();
         $model->insertRecords('comment', array('customer'=>$userID,'product'=>$productID,'rating'=>$rating,'text'=>$text));
+        if ($model->result){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function deleteProductByCondition($condition){
+        $model = new DBModel();
+        $model->deleteRecords('product',$condition);
         if ($model->result){
             return true;
         } else {

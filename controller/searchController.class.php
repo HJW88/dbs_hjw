@@ -68,8 +68,6 @@ class searchController extends BaseController {
 
                 $condition =  ' ' . implode(' AND ', $condition);
 
-                error_log($condition);
-
                 $products = ProductModel::getAllProducts($condition);
 
                 if ($products){

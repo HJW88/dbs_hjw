@@ -43,6 +43,18 @@ class UserModel {
     }
 
 
+    static public function getUsersByCondition($codition=null){
+
+        $model = new DBModel();
+        $model->selectRecords('user',$codition);
+        if ($model->result){
+            return $model->getRows();
+        } else {
+            return null;
+        }
+
+    }
+
 
     /**
      * Create a use/customer in db.
