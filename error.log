@@ -80,3 +80,6 @@
 [01-Mar-2015 01:25:59 Europe/Berlin] User Logouttestuser1
 [01-Mar-2015 01:26:04 Europe/Berlin] User Login{"id":"1","username":"hjw88","firstname":"Jingwen","lastname":"Hu","email":"hjw@g.com","gender":"Female","is_admin":"1"}
 [01-Mar-2015 01:26:32 Europe/Berlin] User Logouthjw88
+[01-Mar-2015 01:36:04 Europe/Berlin] Error uploading image
+[01-Mar-2015 01:40:28 Europe/Berlin] User Logouthjw88
+[01-Mar-2015 01:40:41 Europe/Berlin] User Login{"id":"2","username":"testuser","firstname":"Testuser","lastname":"Test","email":"hi@love","gender":"Male","is_admin":"0"}
