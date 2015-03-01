@@ -12,9 +12,15 @@
  */
 class userController extends BaseController
 {
-
+    /**
+     *
+     * The user page, here user can update its profile
+     * and see all its orders.
+     *
+     */
     public function index()
     {
+        // test if this user is login
         if ($user = userController::getLoginUser()) {
             $this->showHeader('My Account');
             $this->showAlert();
@@ -27,13 +33,18 @@ class userController extends BaseController
 
             $this->showFooter();
         } else {
+            // if not login, then redirect to login in page
             $this->setSesstion('alert','warning','Please Login');
             $this->redirectTo('user/login');
         }
     }
 
+    /**
+     * Do sign up , POST to do logic thing, GET to show form
+     */
     public function signup()
     {
+
 
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
@@ -65,6 +76,9 @@ class userController extends BaseController
         }
     }
 
+    /**
+     * Go login in, POST to do logic thing, GET to show Form
+     */
     public function login()
     {
 
@@ -88,6 +102,10 @@ class userController extends BaseController
 
     }
 
+    /**
+     * If user log out, then unset the user session
+     *
+     */
     public function logout()
     {
         error_log('User Logout'. $_SESSION['user']['username']);
@@ -97,8 +115,12 @@ class userController extends BaseController
     }
 
 
+    /**
+     * User update its profile
+     */
     public function update(){
 
+        // Don't allow root and test user to change their profile
         if (!userController::isRoot() && !userController::isTestUser()){
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -131,6 +153,8 @@ class userController extends BaseController
 
 
     /**
+     * This do the logic log in thing
+     *
      * @param $user
      * @return bool
      */

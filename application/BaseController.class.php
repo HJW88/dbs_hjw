@@ -11,7 +11,7 @@
  * All other controller must extended from this class,
  * and implement the index() function.
  *
- * This controller do all basis things like session, header setting
+ * This controller do all basis things like session, header, footer setting
  *
  *
  */

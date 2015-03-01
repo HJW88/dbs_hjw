@@ -7,7 +7,9 @@
 
 Class indexController Extends BaseController
 {
-
+    /**
+     * Redirect to product page
+     */
     public function index()
     {
        // REDIRECT TO PRODUCT

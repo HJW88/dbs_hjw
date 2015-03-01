@@ -7,7 +7,11 @@
  */
 class productController extends BaseController
 {
-
+    /**
+     * Product page
+     * Show all products
+     *
+     */
     public function index()
     {
         $allProducts = ProductModel::getAllProducts(null);
@@ -21,7 +25,13 @@ class productController extends BaseController
         $this->showFooter();
     }
 
-
+    /**
+     * Single Product view
+     * If this user is admin,
+     * then show all admin pannels,
+     * else only show order form and comment form
+     *
+     */
     public function view()
     {
         if (isset($_GET['id'])) {
@@ -66,6 +76,11 @@ class productController extends BaseController
         }
     }
 
+
+    /**
+     * Using GET to delete product,
+     * but must test if this user is admin
+     */
     public function delete()
     {
         if (userController::isAdmin()){
@@ -85,7 +100,9 @@ class productController extends BaseController
         $this->redirectTo('admin');
     }
 
-
+    /**
+     * Get all related products
+     */
     public function related()
     {
         if (!userController::isAdmin()) {
@@ -108,7 +125,9 @@ class productController extends BaseController
         }
     }
 
-
+    /**
+     * Edit product
+     */
     public function edit()
     {
         if (!userController::isAdmin()) {

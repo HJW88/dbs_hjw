@@ -13,7 +13,9 @@ class imageController extends BaseController
 
     }
 
-
+    /**
+     * Delete image with product ID
+     */
     public function delete()
     {
         if (userController::isAdmin() && isset($_GET['id'])){
@@ -34,12 +36,17 @@ class imageController extends BaseController
         $this->redirectTo('product/view&id=' . $_GET['product']);
     }
 
+
+    /**
+     * Add image after uploader returning url
+     */
     public function add()
     {
 
         if (userController::isAdmin()) {
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product'])) {
+                // get uploader returned url
                 $url = uploader::getUploadImageUrl();
                 if ($url) {
                     if (ProductModel::addProductImage($_POST['product'], $url)) {

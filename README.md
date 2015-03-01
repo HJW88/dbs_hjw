@@ -6,6 +6,13 @@ URL
 http://dbcip.cs.uni-duesseldorf.de/~m2059127/dbs_hjw/
 
 
+
+Default Account/Password
+------
+Root Account: hjw88/123123
+Test User: testuser/123123
+
+
 Description
 ------
 This project is the "Abschlussproject" for my DBS AP at the University Duesseldorf, Germany.
